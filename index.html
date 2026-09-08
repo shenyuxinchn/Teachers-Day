@@ -64,7 +64,7 @@
         margin-top: 16px;
     }
 
-    /* 花瓣 → 改成落叶/纸鹤感 */
+    /* 花瓣 */
     .petal {
         position: fixed;
         top: -30px;
@@ -100,6 +100,16 @@
         margin-top: 22px;
         font-size: 15px;
         color: #aaa;
+    }
+
+    /* ✅ 庆祝文字不换行 */
+    #celebrateArea div {
+        white-space: nowrap;
+        text-align: center;
+        font-size: clamp(28px, 7vw, 42px);
+        font-weight: 700;
+        margin-top: 20px;
+        line-height: 1.2;
     }
 </style>
 </head>
@@ -188,9 +198,7 @@ for (let i = 0; i < 20; i++) {
         }
 
         document.getElementById("celebrateArea").innerHTML =
-            `<div style="font-size:48px;margin-top:20px;">
-                🎉 老师您辛苦了 🎊
-            </div>`;
+            `<div>🎉 老师您辛苦了 🎊</div>`;
     }
 </script>
 
