@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>教师节快乐</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        margin: 0;
+        overflow-x: hidden;
+        font-family: "Microsoft YaHei", sans-serif;
+        background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+        text-align: center;
+    }
+
+    .card {
+        background: white;
+        width: 92%;
+        max-width: 420px;
+        margin: 40px auto;
+        padding: 40px 28px;
+        border-radius: 22px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+        color: #4a90d9;
+        font-size: 32px;
+        margin-bottom: 12px;
+    }
+
+    .date {
+        color: #999;
+        font-size: 15px;
+        margin-bottom: 22px;
+    }
+
+    .message {
+        font-size: 18px;
+        line-height: 2;
+        color: #444;
+        min-height: 140px;
+        margin-bottom: 22px;
+    }
+
+    button {
+        background: #4a90d9;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-size: 17px;
+        cursor: pointer;
+        margin: 6px;
+    }
+
+    button:hover {
+        background: #3a7bc8;
+    }
+
+    .hint {
+        font-size: 14px;
+        color: #888;
+        margin-top: 16px;
+    }
+
+    /* 花瓣 → 改成落叶/纸鹤感 */
+    .petal {
+        position: fixed;
+        top: -30px;
+        width: 22px;
+        height: 22px;
+        background: #a8d4f0;
+        border-radius: 50% 50% 50% 0;
+        opacity: 0.8;
+        animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(110vh) rotate(720deg);
+        }
+    }
+
+    /* 烟花 */
+    .firework {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(30); opacity: 0; }
+    }
+
+    .footer {
+        margin-top: 22px;
+        font-size: 15px;
+        color: #aaa;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- 背景音乐 -->
+<audio id="bgm" loop>
+    <source src="music.mp3">
+</audio>
+
+<script>
+for (let i = 0; i < 20; i++) {
+    const petal = document.createElement("div");
+    petal.className = "petal";
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (Math.random() * 3 + 4) + "s";
+    petal.style.width = petal.style.height = (Math.random() * 10 + 12) + "px";
+    petal.style.opacity = Math.random() * 0.5 + 0.5;
+    document.body.appendChild(petal);
+}
+</script>
+
+<div class="card">
+    <h1>🌸 老师您辛苦了 🌸</h1>
+    <div class="date" id="date"></div>
+
+    <div class="message" id="message">
+        点击下方按钮，查看给你的专属祝福 ❤️
+    </div>
+
+    <button onclick="showMessage()">换一句祝福</button>
+    <button onclick="celebrate()">庆祝一下 🎉</button>
+    <button onclick="playMusic()">🎵 播放音乐</button>
+
+    <div id="celebrateArea"></div>
+
+    <div class="hint">💡 建议先点击「播放音乐」</div>
+
+    <div class="footer">
+        来自你永远的"程序员学生"
+    </div>
+</div>
+
+<script>
+    const messages = [
+        "老师，您就像我人生里的 compiler，把我这个粗糙的 source code 编译成了能运行的程序。",
+        "您是我代码里的唯一 teacher，不改逻辑，就能让我整个人 debug 成功。",
+        "感谢您一直做我最稳定的 IDE，也是我永远的 debugger。",
+        "老师，今天您只负责开心，剩下的 bug 都交给我来修。",
+        "世界有很多 API，但只有您返回的状态码永远是 200 OK。",
+        "不管我长多大，在您面前永远是那个没关 warning 的小程序。",
+        "老师，您不是我的依赖库，您是我整个运行环境。"
+    ];
+
+    function showMessage() {
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        document.getElementById("message").innerText = msg;
+    }
+
+    // 日期
+    const today = new Date();
+    document.getElementById("date").innerText =
+        today.getFullYear() + "年" +
+        (today.getMonth() + 1) + "月" +
+        today.getDate() + "日";
+
+    // ✅ 播放音乐
+    function playMusic() {
+        const audio = document.getElementById("bgm");
+        if (audio.paused) {
+            audio.play();
+        }
+    }
+
+    // 烟花 + 礼花
+    function celebrate() {
+        for (let i = 0; i < 30; i++) {
+            const fw = document.createElement("div");
+            fw.className = "firework";
+            fw.style.left = Math.random() * 100 + "vw";
+            fw.style.top = Math.random() * 50 + "vh";
+            fw.style.background = ["red","yellow","skyblue","purple","orange"][Math.floor(Math.random()*5)];
+            document.body.appendChild(fw);
+            setTimeout(() => fw.remove(), 1200);
+        }
+
+        document.getElementById("celebrateArea").innerHTML =
+            `<div style="font-size:48px;margin-top:20px;">
+                🎉 老师您辛苦了 🎊
+            </div>`;
+    }
+</script>
+
+</body>
+</html>
