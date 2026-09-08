@@ -21,6 +21,7 @@
         padding: 40px 28px;
         border-radius: 22px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        box-sizing: border-box;
     }
 
     h1 {
@@ -37,10 +38,42 @@
 
     .message {
         font-size: 18px;
-        line-height: 2;
+        line-height: 1.8;
         color: #444;
         min-height: 140px;
-        margin-bottom: 22px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 8px;
+    }
+
+    .video-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0 18px;
+    }
+
+    .video-box {
+        width: 100%;
+        max-width: 360px;
+        aspect-ratio: 16 / 9;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #000;
+        box-shadow: 0 8px 24px rgba(74,144,217,0.25);
+        box-sizing: border-box;
+    }
+
+    .video-box video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        background: #000;
     }
 
     button {
@@ -64,7 +97,6 @@
         margin-top: 16px;
     }
 
-    /* 花瓣 */
     .petal {
         position: fixed;
         top: -30px;
@@ -74,6 +106,8 @@
         border-radius: 50% 50% 50% 0;
         opacity: 0.8;
         animation: fall linear infinite;
+        pointer-events: none;
+        z-index: 1;
     }
 
     @keyframes fall {
@@ -82,13 +116,14 @@
         }
     }
 
-    /* 烟花 */
     .firework {
         position: fixed;
         width: 6px;
         height: 6px;
         border-radius: 50%;
         animation: explode 1s ease-out forwards;
+        z-index: 2;
+        pointer-events: none;
     }
 
     @keyframes explode {
@@ -102,24 +137,23 @@
         color: #aaa;
     }
 
-    /* ✅ 庆祝文字不换行 */
     #celebrateArea div {
         white-space: nowrap;
         text-align: center;
         font-size: clamp(28px, 7vw, 42px);
-        font-weight: 700;
+        font-weight: 400;
         margin-top: 20px;
         line-height: 1.2;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
     }
 </style>
 </head>
 
 <body>
-
-<!-- 背景音乐 -->
-<audio id="bgm" loop>
-    <source src="music.mp3">
-</audio>
 
 <script>
 for (let i = 0; i < 20; i++) {
@@ -138,16 +172,23 @@ for (let i = 0; i < 20; i++) {
     <div class="date" id="date"></div>
 
     <div class="message" id="message">
-        点击下方按钮，查看给您的专属祝福 ❤️
+        点击下方按钮，查看给孙老师的专属祝福 ❤️
+    </div>
+
+    <div class="video-wrap">
+        <div class="video-box">
+            <video id="greetVideo" controls preload="metadata" poster="cover.jpg" src="teacher.mp4">
+                你的浏览器不支持 HTML5 视频
+            </video>
+        </div>
     </div>
 
     <button onclick="showMessage()">换一句祝福</button>
     <button onclick="celebrate()">庆祝一下 🎉</button>
-    <button onclick="playMusic()">🎵 播放音乐</button>
 
     <div id="celebrateArea"></div>
 
-    <div class="hint">💡 建议先点击「播放音乐」</div>
+    <div class="hint">💡 点击视频播放祝福</div>
 
     <div class="footer">
         来自于爱您的徐梓彤同学
@@ -156,13 +197,13 @@ for (let i = 0; i < 20; i++) {
 
 <script>
     const messages = [
-        "老师，您就像我人生里的 compiler，把我这个粗糙的 source code 编译成了能运行的程序。",
-        "您是我代码里的唯一 teacher，不改逻辑，就能让我整个人 debug 成功。",
-        "感谢您一直做我最稳定的 IDE，也是我永远的 debugger。",
-        "老师，今天您只负责开心，剩下的 bug 都交给我来修。",
-        "世界有很多 API，但只有您返回的状态码永远是 200 OK。",
-        "不管我长多大，在您面前永远是那个没关 warning 的小程序。",
-        "老师，您不是我的依赖库，您是我整个运行环境。"
+        "孙老师，您每天教我们认字、算数，辛苦啦！我会好好听课，不捣乱的～",
+        "孙老师，我最喜欢上您的课了！您笑起来特别好看，祝您每天都开开心心！",
+        "孙老师，谢谢您教我写字，我现在会写自己的名字啦！教师节快乐！",
+        "孙老师，您就像妈妈一样照顾我们，我好喜欢您呀！",
+        "孙老师，我以后要当班长帮您收作业本，您就不用那么累了！",
+        "孙老师，祝您教师节快乐！我要画一幅画送给您～",
+        "孙老师，您讲课的时候声音真好听，我每次都听得很认真！"
     ];
 
     function showMessage() {
@@ -170,22 +211,12 @@ for (let i = 0; i < 20; i++) {
         document.getElementById("message").innerText = msg;
     }
 
-    // 日期
     const today = new Date();
     document.getElementById("date").innerText =
         today.getFullYear() + "年" +
         (today.getMonth() + 1) + "月" +
         today.getDate() + "日";
 
-    // ✅ 播放音乐
-    function playMusic() {
-        const audio = document.getElementById("bgm");
-        if (audio.paused) {
-            audio.play();
-        }
-    }
-
-    // 烟花 + 礼花
     function celebrate() {
         for (let i = 0; i < 30; i++) {
             const fw = document.createElement("div");
